@@ -34,7 +34,7 @@ export const connectWallet = async () => {
 
 export const getCurrentWalletConnected = async () => {
   if (window.ethereum) {
-    //  if it exists, use the metamask is installed.
+    //  if it exists, metamask is installed.
     try {
       const addressArray = await window.ethereum.request({
         // this is a an ETH RPC API request.
@@ -70,7 +70,7 @@ export const getCurrentWalletConnected = async () => {
   }
 }
 
-const noMetaMaskErrorStatus = (
+export const noMetaMaskErrorStatus = (
   <span>
     <p>
       {" "}
