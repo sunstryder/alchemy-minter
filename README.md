@@ -1,11 +1,12 @@
 # 📝 NFT Minter Tutorial Files
 
-This repository contains the starter files (`minter-starter-files`) and completed version (`nft-tutorial`) of Alchemy's [NFT Minter tutorial](https://docs.alchemyapi.io/alchemy/tutorials/nft-minter). 
+This project was created from Alchemy's [NFT Minter tutorial](https://docs.alchemyapi.io/alchemy/tutorials/nft-minter).
+
+It has been cleaned up and fixed up, and it is deployed at <https://alchemy-minter-inky.vercel.app/>
 
 ## ℹ️  Project Structure
 
 ```sh
-minter-starter-files
 ├── README.md
 ├── package.json
 ├── public
@@ -18,13 +19,10 @@ minter-starter-files
 ├── src
 │   ├── App.css
 │   ├── App.js
-│   ├── App.test.js
 │   ├── Minter.js
-│   ├── contract-abi.json 
+│   ├── contract-abi.json
 │   ├── index.css
 │   ├── index.js
-│   ├── reportWebVitals.js
-│   ├── setupTests.js
 │   └── utils
 │       ├── interact.js
 │       └── pinata.js
@@ -35,6 +33,15 @@ Here is the transaction for the NFT I minted!!! How cool is that??
 <https://ropsten.etherscan.io/tx/0x160fda474902be6d93783c92fe11639c10b2c97077bb1c440e0aaf72ee3a30ef>
 
 
-## 🤔 Note
+## 🤔 Running it
 
-Neither the `minter-starter-files` nor the `nft-tutorial` have their `node_modules` folder. So before running `npm start` in your terminal to start the React project, you need to run `npm install` to download all the package dependencies.
+```sh
+yarn install
+yarn start
+```
+
+## Prepping your wallet
+1. Use [Ropsten Faucet](https://faucet.ropsten.be/) to add some test Eth to your account.
+1. Connect Metamask via Ropsten Network
+1. Fill in the fields and then click mint!
+1. NB: The env variables point to my Pinata dev account so this probs won't work, but if you clone the project and use your own credentials you can mint it and see the Etherscan transaction!
