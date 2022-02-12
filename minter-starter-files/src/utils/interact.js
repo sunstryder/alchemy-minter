@@ -85,7 +85,7 @@ export const noMetaMaskErrorStatus = (
     <p>
       {" "}
       🦊{" "}
-      <a target="_blank" href={`https://metamask.io/download.html`}>
+      <a target="_blank" rel="noreferrer" href={`https://metamask.io/download.html`}>
         You must install Metamask, a virtual Ethereum wallet, in your
         browser.
       </a>
@@ -95,7 +95,7 @@ export const noMetaMaskErrorStatus = (
 
 // Typescript could remove this type checking error handling.
 export const mintNFT = async (url, name, description) => {
-  if (url.trim() == '' || (name.trim() == '' || description.trim() == '')) {
+  if (url.trim() === '' || (name.trim() === '' || description.trim() === '')) {
     return {
       success: false,
       status: '❗Please make sure all fields are completed before minting.'

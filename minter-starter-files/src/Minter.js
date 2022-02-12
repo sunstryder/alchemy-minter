@@ -10,13 +10,17 @@ const Minter = () => {
   const [description, setDescription] = useState("");
   const [url, setURL] = useState("");
  
-  useEffect(async () => {
+  useEffect(() => {
     // check if a wallet is already connected.
-    const { address, status } = await getCurrentWalletConnected();
-    setWallet(address)
-    setStatus(status);
+    async function checkWallet(){
+      const { address, status } = await getCurrentWalletConnected();
+      setWallet(address)
+      setStatus(status);
 
-    addWalletListener()
+      addWalletListener()
+    }
+    checkWallet()
+    
   }, []);
 
   const connectWalletPressed = async () => {
