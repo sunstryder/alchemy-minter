@@ -5,7 +5,7 @@ const secret = process.env.REACT_APP_PINATA_API_SECRET;
 
 const axios = require('axios');
 
-export const pinJSONtoIPFS = async (body) => {
+export async function pinJSONtoIPFS (body) {
   const url = 'https://api.pinata.cloud/pinning/pinJSONToIPFS'
   return axios.post(url, body, {
     headers: {

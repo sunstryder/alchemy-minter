@@ -1,7 +1,17 @@
 // This file contains all of our wallet and smart contract interfacing.
+import { pinJSONtoIPFS } from './pinata.js'
+import { createAlchemyWeb3 } from '@alch/alchemy-web3'
+require('dotenv').config();
+const alchKey = process.env.REACT_APP_ALCHEMY_KEY;
+// this is the alchemy wrapper around web3.js.
+const web3 = createAlchemyWeb3(alchKey);
+// the contract ABI, which we're interfacing with
+const contractABI = require('../contract-abi.json')
+// this is the example contract used for tutorial
+// see https://ropsten.etherscan.io/address/0x4C4a07F737Bf57F6632B6CAB089B78f62385aCaE#code
+const contractAddress = '0x4C4a07F737Bf57F6632B6CAB089B78f62385aCaE'
 
 // connectWallet checks for a wallet plugin (metamask).
-
 export const connectWallet = async () => {
   if (window.ethereum) {
     //  if it exists, use the metamask API to get the addresses for this wallet.
@@ -82,3 +92,59 @@ export const noMetaMaskErrorStatus = (
     </p>
   </span>
 )
+
+// Typescript could remove this type checking error handling.
+export const mintNFT = async (url, name, description) => {
+  if (url.trim() == '' || (name.trim() == '' || description.trim() == '')) {
+    return {
+      success: false,
+      status: '❗Please make sure all fields are completed before minting.'
+    }
+  }
+
+  // create metadata
+  const metadata = new Object();
+  metadata.name = name
+  metadata.image = url
+  metadata.description = description
+
+  // call pinata api to upload to IPFS
+  const pinataResponse = await pinJSONtoIPFS(metadata)
+  if (!pinataResponse.success) {
+    return {
+      success: false,
+      status: "😢 Something went wrong while uploading your tokenURI."
+    }
+  }
+
+  // if everything goes according to plan we get our URI
+  const tokenURI = pinataResponse.pinataUrl;
+  window.contract = await new web3.eth.Contract(contractABI, contractAddress);
+
+  // preparing data for Ethereum transaction
+  const transactionParams = {
+    to: contractAddress,
+    from: window.ethereum.selectedAddress,
+    // call the actual smart contract here
+    'data': window.contract.methods.mintNFT(window.ethereum.selectedAddress, tokenURI).encodeABI()
+  }
+
+  // sign the transaction
+
+  try {
+    const txHash = await window.ethereum.request({
+      method: "eth_sendTransaction",
+      params: [transactionParams],
+    });
+    return {
+      success: true,
+      status: '🚀 Your token has been minted! https://ropsten.etherscan.io/tx/' + txHash,
+    }
+  } catch (err) {
+    return {
+      success: false,
+      status: '😥 Something went wrong while minting your token.' + err.message
+    }
+  }
+}
+
