@@ -27,18 +27,58 @@ export const connectWallet = async () => {
     // If metamask isn't installed, let the user know via UI
     return {
       address: '',
-      status: (
-        <span>
-          <p>
-            {" "}
-            🦊{" "}
-            <a target="_blank" href={`https://metamask.io/download.html`}>
-              You must install Metamask, a virtual Ethereum wallet, in your
-              browser.
-            </a>
-          </p>
-        </span>
-      )
+      status: noMetaMaskErrorStatus
     }
   }
 }
+
+export const getCurrentWalletConnected = async () => {
+  if (window.ethereum) {
+    //  if it exists, use the metamask is installed.
+    try {
+      const addressArray = await window.ethereum.request({
+        // this is a an ETH RPC API request.
+        // see https://eth.wiki/json-rpc/API#eth_accounts
+        method: "eth_accounts",
+      });
+
+      if (addressArray.length > 0) {
+        return {
+          address: addressArray[0],
+          status: '👆🏽 Write a message in the text-field above.',
+        }
+      } else {
+        // not connected, no addresses in array.
+        return {
+          address: '',
+          status: '🦊 Connect to Metamask using the top right button.',
+        }
+      }
+    } catch (error) {
+      // if there's an error, return the error.
+        return {
+          status: '😥 ...' + error.message,
+          address: '',
+        }
+    }
+  } else {
+    // If metamask isn't installed, let the user know via UI
+    return {
+      address: '',
+      status: noMetaMaskErrorStatus
+    }
+  }
+}
+
+const noMetaMaskErrorStatus = (
+  <span>
+    <p>
+      {" "}
+      🦊{" "}
+      <a target="_blank" href={`https://metamask.io/download.html`}>
+        You must install Metamask, a virtual Ethereum wallet, in your
+        browser.
+      </a>
+    </p>
+  </span>
+)
