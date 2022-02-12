@@ -4,7 +4,7 @@ import Minter from './Minter'
 function App() {
   return (
     <div className="App">
-      <Minter></Minter>
+      <Minter/>
     </div>
   );
 }
